@@ -1,0 +1,19 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf500
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 /* Xor (exclusive or) gate:\
+	If a<>b out=1 else out=0. */\
+CHIP xor \{\
+	IN a, b;\
+	OUT out;\
+	PARTS:\
+	Not(in=a, out=nota);\
+	Not(in=b, out=notb);\
+	And(a=a, b=notb, out=w1);\
+	And(a=nota, b=b, out=w2);\
+	Or(a=w1, b=w2, out=out);\
+\}}
