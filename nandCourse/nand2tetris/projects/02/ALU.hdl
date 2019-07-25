@@ -43,4 +43,28 @@ CHIP ALU {
 
     PARTS:
    // Put you code here:
+   Mux16(a=x, b[0..15]=false, sel=zx, out=zxout);
+   Not16(in=zxout, out=notx);
+   Mux16(a=zxout, b=notx, sel=nx, out=nxout); // x or not x
+
+   Mux16(a=y, b[0..15]=false, sel=zy, out=zyout);
+   Not16(in=zyout, out=noty);
+   Mux16(a=zyout, b=noty, sel=ny, out=nyout);// y or not y
+
+   Add16(a=nxout, b=nyout, out=xplusy); // x + y
+   And16(a=nxout, b=nyout, out=xandy); // x & y
+   Mux16(a=xandy, b=xplusy, sel=f, out=fxy); // f is 1 then add, f is 0 then and
+
+   Not16(in=fxy, out=notfxy); // negate the output to this point for no gate
+   Mux16(a=fxy, b=notfxy, sel=no, out=outno); // select if output should be negated based on no
+
+   // need ors to check if all inputs are 0 for zr, implement or16way
+   Or16Way(in=outno, out=orout);
+   Not(in=orout, out=zr); // if all or checks where 0 then zr becomes 1
+
+   // calc ng
+   And16(a[0..15]=true, b=outno, out[15]=ng, out[0..14]=drop);
+
+   // final output just need to send it out
+   Or16(a=outno, b[0..15]=false, out=out);
 }
